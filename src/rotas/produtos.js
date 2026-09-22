@@ -20,14 +20,14 @@ const router = express.Router();
 //  DELETE /produtos/:id     → 204 (sem corpo); 404 se não existir
 
 // GET /produtos — lista todos
-router.get("/produto", async (req, res) => {
+router.get("/produtos", async (req, res) => {
   const produto = await Produto.findAll();
   res.status(200).json(produto);
   // TODO: retorne 200 com todos os produtos (Produto.findAll()).
 });
 
 // GET /produtos/:id — um produto
-router.get("/produto/:id", async (req, res) => {
+router.get("/produtos/:id", async (req, res) => {
   const { id } = req.params;
 
   const produto = await Produto.findByPk(id)
@@ -40,7 +40,7 @@ router.get("/produto/:id", async (req, res) => {
 });
 
 // POST /produtos — cria
-router.post("/produto", async (req, res) => {
+router.post("/produtos", async (req, res) => {
   const { descricao } = req.body;
   const { preco } = req.body;
   
@@ -56,7 +56,7 @@ router.post("/produto", async (req, res) => {
 });
 
 // PUT /produtos/:id — substitui (descricao e preco obrigatórios)
-router.put("/produto/:id", async (req, res) => {
+router.put("/produtos/:id", async (req, res) => {
 
   const { descricao } = req.body;
   const { preco } = req.body;
@@ -82,7 +82,7 @@ router.put("/produto/:id", async (req, res) => {
 });
 
 // PATCH /produtos/:id — atualização parcial
-router.patch("/produto/:id", async (req, res) => {
+router.patch("/produtos/:id", async (req, res) => {
   const { id } = req.params;
   const { descricao } = req.body;
   const { preco } = req.body;
@@ -104,7 +104,7 @@ router.patch("/produto/:id", async (req, res) => {
 });
 
 // DELETE /produtos/:id — remove
-router.delete("/produto/:id", async (req, res) => {
+router.delete("/produtos/:id", async (req, res) => {
   const { id } = req.params
 
   const produto = await Produto.findByPk(id)
