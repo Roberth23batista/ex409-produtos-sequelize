@@ -22,7 +22,7 @@ const router = express.Router();
 // GET /produtos — lista todos
 router.get("/produtos", async (req, res) => {
   const produto = await Produto.findAll();
-  res.status(200).json(produto);
+  return res.status(200).json(produto);
   // TODO: retorne 200 com todos os produtos (Produto.findAll()).
 });
 
@@ -32,9 +32,9 @@ router.get("/produtos/:id", async (req, res) => {
 
   const produto = await Produto.findByPk(id)
   if(produto){
-    res.status(200).json(produto)
+    return res.status(200).json(produto)
   }else{
-    res.status(404).json("Produto não encontrado")
+    return res.status(404).json("Produto não encontrado")
   }
   // TODO: busque por id; 200 com o produto ou 404 se não existir.
 });
@@ -45,11 +45,11 @@ router.post("/produtos", async (req, res) => {
   const { preco } = req.body;
   
   if(descricao == null || preco == null){
-    res.status(400).json("Descrição e/ou preço faltando")
+    return res.status(400).json("Descrição e/ou preço faltando")
 
   }else{
     const produto = await Produto.create({ descricao }, { preco });
-    res.status(201).json(produto)
+    return res.status(201).json(produto)
 
   }
   // TODO: valide descricao e preco (400 se faltar); crie e responda 201 com o produto.
@@ -63,20 +63,20 @@ router.put("/produtos/:id", async (req, res) => {
   const { id } = req.params;
   
   if(descricao == null || preco == null){
-    res.status(400).json("Descrição e/ou preço faltando")
+    return res.status(400).json("Descrição e/ou preço faltando")
 
   }
 
   const produto = await Produto.findByPk(id);
   if(produto == null){
-    res.status(400).json("Produto não encontrado")
+    return res.status(400).json("Produto não encontrado")
   }else{
     produto.descricao = descricao;
     produto.preco = preco;
 
     await produto.save();
 
-    res.status(200).json(produto);
+    return res.status(200).json(produto);
   }
   // TODO: 404 se não existir; 400 se faltar campo; senão atualize e responda 200.
 });
@@ -89,7 +89,7 @@ router.patch("/produtos/:id", async (req, res) => {
 
   const produto = await Produto.findByPk(id)
   if(produto == null){
-    res.status(404).json("Produto não encontrado/inexistente")
+    return res.status(404).json("Produto não encontrado/inexistente")
 
   }if(descricao != null){
     produto.descricao = descricao
@@ -99,7 +99,7 @@ router.patch("/produtos/:id", async (req, res) => {
 
   }
   await produto.save()
-  res.status(200).json("Atualizado com sucesso!")
+  return res.status(200).json("Atualizado com sucesso!")
   // TODO: 404 se não existir; atualize só os campos enviados; responda 200.
 });
 
@@ -109,10 +109,10 @@ router.delete("/produtos/:id", async (req, res) => {
 
   const produto = await Produto.findByPk(id)
   if(produto == null){
-    res.status(404).json("Produto não encontraod/inexistente")
+    return res.status(404).json("Produto não encontraod/inexistente")
   }else{
     await produto.destroy();
-    res.status(204).json("Deletado com sucesso!")
+    return res.status(204).json("Deletado com sucesso!")
   }
   // TODO: 404 se não existir; senão remova e responda 204 (sem corpo).
 });
