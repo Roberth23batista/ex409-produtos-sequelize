@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
   if(produto){
     return res.status(200).json(produto)
   }else{
-    return res.status(404).json("Produto não encontrado")
+    return res.status(404).json({ erro: 'Produto não encontrado' })
   }
   // TODO: busque por id; 200 com o produto ou 404 se não existir.
 });
@@ -45,13 +45,12 @@ router.post("/", async (req, res) => {
   const { preco } = req.body;
   
   if(descricao == null || preco == null){
-    return res.status(400).json("Descrição e/ou preço faltando")
-
-  }else{
-    const produto = await Produto.create({ descricao }, { preco });
-    return res.status(201).json(produto)
+    return res.status(400).json({erro: 'Descrição e/ou preço faltando'})
 
   }
+  const produto = await Produto.create({ descricao }, { preco });
+  return res.status(201).json(produto)
+
   // TODO: valide descricao e preco (400 se faltar); crie e responda 201 com o produto.
 });
 
@@ -63,13 +62,13 @@ router.put("/:id", async (req, res) => {
   const { id } = req.params;
   
   if(descricao == null || preco == null){
-    return res.status(400).json("Descrição e/ou preço faltando")
+    return res.status(400).json({ erro: "Descrição e/ou preço faltando" })
 
   }
 
   const produto = await Produto.findByPk(id);
   if(produto == null){
-    return res.status(400).json("Produto não encontrado")
+    return res.status(400).json({ erro: "Produto não encontrado" })
   }else{
     produto.descricao = descricao;
     produto.preco = preco;
@@ -89,7 +88,7 @@ router.patch("/:id", async (req, res) => {
 
   const produto = await Produto.findByPk(id)
   if(produto == null){
-    return res.status(404).json("Produto não encontrado/inexistente")
+    return res.status(404).json({ erro: "Produto não encontrado/inexistente" })
 
   }if(descricao != null){
     produto.descricao = descricao
@@ -99,7 +98,7 @@ router.patch("/:id", async (req, res) => {
 
   }
   await produto.save()
-  return res.status(200).json("Atualizado com sucesso!")
+  return res.status(200).json(produto)
   // TODO: 404 se não existir; atualize só os campos enviados; responda 200.
 });
 
@@ -109,10 +108,10 @@ router.delete("/:id", async (req, res) => {
 
   const produto = await Produto.findByPk(id)
   if(produto == null){
-    return res.status(404).json("Produto não encontraod/inexistente")
+    return res.status(404).json({ erro: "Produto não encontrado/inexistente" })
   }else{
     await produto.destroy();
-    return res.status(204).json("Deletado com sucesso!")
+    return res.status(204).send();
   }
   // TODO: 404 se não existir; senão remova e responda 204 (sem corpo).
 });
